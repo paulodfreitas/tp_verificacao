@@ -1,0 +1,93 @@
+MODULE int_clock (size)
+	VAR
+	  value : {0, 1, 2, 3, 4};
+	ASSIGN
+	  init(value) := 0;
+	  next(value) := (value+1) mod 4;
+	DEFINE
+	  clock := value;
+
+
+MODULE ok_to_continue(p_new, p_old, clock, process_when)
+	VAR
+	  value : boolean;
+	ASSIGN
+	  init(value) := TRUE;
+	  next(value) := case
+			(clock = process_when) & (p_old > p_new) : FALSE;
+			TRUE : value;
+		esac;
+	DEFINE
+	  ok := value;
+
+
+MODULE pi_i(id, p_new, p_old, clock, process_when)
+	VAR
+		ids : array 1..5 of boolean;
+	ASSIGN
+		init(ids[1]) := FALSE;
+		init(ids[2]) := FALSE;
+		init(ids[3]) := FALSE;
+		init(ids[4]) := FALSE;
+		init(ids[5]) := FALSE;
+
+		next(ids[1]) := case
+			(clock = process_when & 1 = id & p_new > p_old) :  TRUE;
+			TRUE : ids[1];
+		  esac;
+
+		next(ids[2]) := case
+			(clock = process_when & 2 = id & p_new > p_old) :  TRUE;
+			TRUE : ids[2];
+		  esac;
+
+		next(ids[3]) := case
+			(clock = process_when & 3 = id & p_new > p_old) :  TRUE;
+			TRUE : ids[3];
+		  esac;
+
+		next(ids[4]) := case
+			(clock = process_when & 4 = id & p_new > p_old) :  TRUE;
+			TRUE : ids[4];
+		  esac;
+
+		next(ids[5]) := case
+			(clock = process_when & 5 = id & p_new > p_old) :  TRUE;
+			TRUE : ids[5];
+		  esac;
+	DEFINE
+		elems := ids;
+		
+
+
+--Clock => Linha Código
+--0     => 10 - 11 //não det, que no futuro é G
+--1     => 12 - 13 //atualiza valor de p_old
+--2     => 14      //atualiza PI-i
+--3     => 15      //valida OkToProcede
+
+MODULE main
+	VAR
+	  clock : int_clock(4);
+	  p_old : {0,1,2};
+	  p_new : {0,1,2};
+	  ok : ok_to_continue(p_new, 1, clock.clock, 2);
+	  id : {1,2,3,4,5};
+	  elems : pi_i(id, p_new, p_old, clock.clock, 0);
+	ASSIGN
+      init(p_old) := 1;
+	  init(p_new) := 2;
+	  init(id) := 3;
+
+	  next(p_new) := case 
+			(ok.ok & clock.clock = 3) : {0, 1, 2};
+			TRUE : p_new;
+		esac;
+
+      next(p_old) := case
+			(ok.ok & clock.clock = 1 & p_new>p_old) : p_new;
+			TRUE : p_old;
+		esac;
+
+--SPEC AG (ok.ok = TRUE)
+--SPEC AG (elems.elems[3] = FALSE)
