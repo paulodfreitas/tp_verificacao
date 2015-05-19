@@ -1,0 +1,22 @@
+MODULE log_fat (x)
+  VAR
+    log_fatx : array 1..16 of integer;
+  ASSIGN
+    init(log_fatx[1]) := 0;
+    init(log_fatx[2]) := 693;
+    init(log_fatx[3]) := 1792;
+    init(log_fatx[4]) := 3178;
+    init(log_fatx[5]) := 4787;
+    init(log_fatx[6]) := 6579;
+    init(log_fatx[7]) := 8525;
+    init(log_fatx[8]) := 10605;
+    init(log_fatx[9]) := 12802;
+    init(log_fatx[10]) := 15104;
+    init(log_fatx[11]) := 17502;
+    init(log_fatx[12]) := 19987;
+    init(log_fatx[13]) := 21382;
+    init(log_fatx[14]) := 20969;
+    init(log_fatx[15]) := 21419;
+    init(log_fatx[16]) := 21419;
+  DEFINE
+    value := log_fatx;
