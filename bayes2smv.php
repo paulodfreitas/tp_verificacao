@@ -14,7 +14,7 @@ function getModule($featureName, array $values, array $parents, array $probabili
     }
 
     $probCases = implode("\n      ",$probCases);
-    if (count($probCases) > 1) {
+    if (count($values) > 1) {
         $assignStr = <<<SMV
   ASSIGN
     init(value) := {{$valuesStr}};
