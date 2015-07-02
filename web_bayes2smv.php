@@ -29,13 +29,20 @@ function getModule($featureName, array $values, array $parents, array $probabili
     }
 
     $probCases = implode("\n      ",$probCases);
+    if (count($values) > 1) {
+        $assignStr = <<<SMV
+  ASSIGN
+    init(value) := {{$valuesStr}};
+    next(value) := value;
+SMV;
+    } else {
+        $assignStr = "";
+    }
     return <<<SMV
 MODULE {$featureName} ($params)
   VAR
     value : {{$valuesStr}};
-  ASSIGN
-    init(value) := {{$valuesStr}};
-    next(value) := value;
+  $assignStr
   DEFINE
     prob := case
       {$probCases}
@@ -212,7 +219,6 @@ function getOtherValues($value, $values) {
         return $x != $value;
     });
 }
-
 
 function prepareProbValue($var) {
     return ceil(((float)$var) * 10000);
