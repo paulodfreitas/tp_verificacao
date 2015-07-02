@@ -119,7 +119,7 @@ function printModulesInput($input, $feature2DecideName) {
     $currFeatureIdx = -1;
     foreach ($featuresLines as $featuresLine) {
         $featuresLine = trim($featuresLine);
-        if (!count($featuresLine)) continue;
+        if (!strlen($featuresLine)) continue;
 
         if (is_numeric(strpos($featuresLine, "Feature:"))) {
             $matches = array();
@@ -211,6 +211,6 @@ function prepareProbValue($var) {
 }
 
 $inputFileName = isset($argv[1]) ? $argv[1] : "input.txt";
-$feature2DecideName = isset($argv[2]) ? $argv[2] : "v_65";
+$feature2DecideName = isset($argv[2]) ? "v_".$argv[2] : "v_65";
 $fileContent = file_get_contents($inputFileName);
 printModulesInput($fileContent, $feature2DecideName);
