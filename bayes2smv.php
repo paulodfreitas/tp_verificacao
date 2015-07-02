@@ -14,13 +14,20 @@ function getModule($featureName, array $values, array $parents, array $probabili
     }
 
     $probCases = implode("\n      ",$probCases);
+    if (count($probCases) > 1) {
+        $assignStr = <<<SMV
+  ASSIGN
+    init(value) := {{$valuesStr}};
+    next(value) := value;
+SMV;
+    } else {
+        $assignStr = "";
+    }
     return <<<SMV
 MODULE {$featureName} ($params)
   VAR
     value : {{$valuesStr}};
-  ASSIGN
-    init(value) := {{$valuesStr}};
-    next(value) := value;
+  $assignStr
   DEFINE
     prob := case
       {$probCases}
@@ -204,6 +211,6 @@ function prepareProbValue($var) {
 }
 
 $inputFileName = isset($argv[1]) ? $argv[1] : "input.txt";
-$feature2DecideName = isset($argv[2]) ? $argv[2] : "v_4";
+$feature2DecideName = isset($argv[2]) ? $argv[2] : "v_65";
 $fileContent = file_get_contents($inputFileName);
 printModulesInput($fileContent, $feature2DecideName);
