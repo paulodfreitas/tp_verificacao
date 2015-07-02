@@ -134,7 +134,7 @@ function printModulesInput($input, $feature2DecideName) {
     $currFeatureIdx = -1;
     foreach ($featuresLines as $featuresLine) {
         $featuresLine = trim($featuresLine);
-        if (!count($featuresLine)) continue;
+        if (!strlen($featuresLine)) continue;
 
         if (is_numeric(strpos($featuresLine, "Feature:"))) {
             $matches = array();
@@ -220,13 +220,14 @@ function getOtherValues($value, $values) {
     });
 }
 
+
 function prepareProbValue($var) {
     return ceil(((float)$var) * 10000);
 }
 
 if (isset($_GET["bayes"])) {
     if (isset($_GET["feature2decide"]) && $_GET["feature2decide"]) {
-        $feature2DecideName = $_GET["feature2decide"];
+        $feature2DecideName = "v_".$_GET["feature2decide"];
         $fileContent = $_GET["bayes"];
         echo "<pre>\n";
         printModulesInput($fileContent, $feature2DecideName);
